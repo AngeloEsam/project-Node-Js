@@ -10,8 +10,8 @@ const getAllProducts=async(req,res)=>{
 const addProduct = async (req, res) => {
   try {
     const photo=req.file.filename
-      const {name,description} = req.body;
-      const addNewProduct = await productModel.create({photo,name,description});
+      const {name,description,sellerId} = req.body;
+      const addNewProduct = await productModel.create({photo,name,description,sellerId});
       if (!addNewProduct) {
           return res.status(400).json({ error: 'Failed to add the product' });
       }
