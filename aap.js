@@ -1,5 +1,6 @@
 const express = require("express");
 const userRoutes=require('./routes/userRoutes')
+const orderRoutes=require('./routes/orderRoutes')
 const productRoutes=require('./routes/productRoutes');
 const sellerRoutes=require('./routes/sellerRoutes');
 const mongoose= require('mongoose');
@@ -10,10 +11,11 @@ app.use(express.json());
 app.use(cors())
 mongoose.connect(process.env.CONNECTION_DB).then(()=>console.log("connected to db"))
 .catch((err)=>console.error(err))
-app.use('/users',userRoutes)
 app.use(express.static('./images'))
+app.use('/users',userRoutes)
 app.use('/products',productRoutes);
 app.use('/sellers',sellerRoutes);
+app.use('/orders',orderRoutes);
 app.use('*',(req,res,next)=>{
     res.json({message:"Page not found"})
 })

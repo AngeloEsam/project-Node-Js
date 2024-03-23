@@ -1,7 +1,11 @@
 const productModel=require("../models/productModel")
 const getAllProducts=async(req,res)=>{
     try{
-        let data = await productModel.find().populate('sellerId');  
+      const query=req.query;
+      const limit=parseInt(query.limit) || 10;
+      const page=parseInt(query.page)  || 1;
+      const skip= (page - 1)* limit;
+        let data = await productModel.find().populate('sellerId').limit(limit).skip(skip);  
          res.status(201).json({success:true ,data : data});  
           }catch (err) { 
             return res.status(400).send(`Error ${err}`);
@@ -22,7 +26,7 @@ const addProduct = async (req, res) => {
 }
 const updateProduct=async (req,res)=>{
     const id=req.params.id;
-    const photo= req.body.photo ;
+    const photo= req.body.photo;
     const {name,description,sellerId}=req.body; 
     const updateProduct=await productModel.findByIdAndUpdate(id,{name,description,photo,sellerId},{new: true});
       if (!updateProduct) {

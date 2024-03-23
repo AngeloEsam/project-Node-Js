@@ -1,22 +1,47 @@
+const bcrypt=require('bcryptjs')
+const jwt=require("jsonwebtoken")
 const userModel=require('../models/userModel');
 const getAllUsers=async (req,res)=>{
     try{
-        let users = await userModel.find();
+        let users = await userModel.find({},{password:0});
         res.status(201).json({message:"Successfully fetched all the users",data:users});
     }catch(err){
         res.status(500).json({message:err.message})
     }
 }
-const registerNewUser=async (req,res)=>{
-    const data=req.body;
+const registerNewUser=async (req,res)=>{  
     try{
+        const data=req.body;
+        const oldUser=await userModel.findOne({userName:data.userName});
+        if(oldUser){
+            return res.status(409).json("Username already exist");
+        }
+        const hashedPassword=await bcrypt.hash(data.password, 10)
+        data.password=hashedPassword;
         const createUser= await userModel.create(data);
         res.json(createUser);
     }catch(err){
        
-        res.status(409).json("Error in creating new User");
+        res.status(409).json({message: err.message});
     }
    
+}
+const loginUser=async(req,res)=> {
+    const {userName,password}= req.body;
+    if(!userName || !password){
+        return res.status(400).json({msg:"Please enter userName and password"});
+    }
+    const user=await userModel.findOne({userName:userName})
+    if (!user) {
+        return res.status(400).json({msg:"invalid userName"});
+    }
+    let isValid=await bcrypt.compare(password, user.password)
+    if (!isValid) {
+        return res.status(400).json({msg:'Invalid Password'})
+    }
+     //Create JWT  
+     let token= await  jwt.sign({data:{userName:user.userName,id:user._id}},process.env.SECRET_KEY)
+     res.json({message:'success',token:token});
 }
 const getSingleUser= async (req,res)=>{
     const {id} = req.params;
@@ -47,6 +72,7 @@ const getSingleUser= async (req,res)=>{
 module.exports={
     getAllUsers,
     registerNewUser,
+    loginUser,
     getSingleUser,
     updateUser,
     deleteUser

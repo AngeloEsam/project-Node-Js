@@ -17,13 +17,12 @@ const upload=multer({storage:storage})
 //get all products
 router.get('/',getAllProducts);
 // Search products by name or seller
-router.get('/search', async (req, res) => {
+router.get('/search',auth, async (req, res) => {
   try {
-    console.log("ggg")
-    
+    const Name= req.query.name.toLowerCase();
     const products = await productModel.find({
       $or: [
-        { name: req.query.name }, 
+        { name: Name }, 
         { sellerId: req.query.sellerId } 
       ]
     });
