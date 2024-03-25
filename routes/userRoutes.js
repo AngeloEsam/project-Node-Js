@@ -9,7 +9,7 @@ router.post("/register", registerNewUser)
 // Login User
 router.post( '/login', loginUser);
 //get single User
-router.get( "/:id" ,auth,getSingleUser ) ; 
+router.get( "/:id",getSingleUser ) ; 
 //update user
 router.patch( '/:id' , updateUser)
 //delete User

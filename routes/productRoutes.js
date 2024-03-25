@@ -3,7 +3,8 @@ const productModel=require("../models/productModel")
 const {getAllProducts,getOneProduct,addProduct,updateProduct,deleteProduct}=require("../controllers/productController")
 const router = express.Router();
 const multer=require("multer");
-const path=require("path")
+const path=require("path");
+const {auth}=require('../middlewares/auth')
 //upload image
 const storage=multer.diskStorage({
     destination:function(req,file,cb){
@@ -35,9 +36,9 @@ router.get('/search',auth, async (req, res) => {
 //get single product
 router.get( '/:id', getOneProduct)
 //add  a new product
-router.post("/",upload.single( 'photo' ), addProduct );
+router.post("/",upload.single( 'photo' ),auth, addProduct );
 //update a product
-router.patch('/:id',updateProduct)
+router.patch('/:id',auth,updateProduct)
 
 //delete product
 router.delete('/:id', deleteProduct);

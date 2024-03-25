@@ -12,9 +12,9 @@ const getAllUsers=async (req,res)=>{
 const registerNewUser=async (req,res)=>{  
     try{
         const data=req.body;
-        const oldUser=await userModel.findOne({userName:data.userName});
+        const oldUser=await userModel.findOne({email:data.email});
         if(oldUser){
-            return res.status(409).json("Username already exist");
+            return res.status(409).json("email already exist");
         }
         const hashedPassword=await bcrypt.hash(data.password, 10)
         data.password=hashedPassword;
@@ -27,20 +27,20 @@ const registerNewUser=async (req,res)=>{
    
 }
 const loginUser=async(req,res)=> {
-    const {userName,password}= req.body;
-    if(!userName || !password){
-        return res.status(400).json({msg:"Please enter userName and password"});
+    const {email,password}= req.body;
+    if(!email || !password){
+        return res.status(400).json({msg:"Please enter email and password"});
     }
-    const user=await userModel.findOne({userName:userName})
+    const user=await userModel.findOne({email:email})
     if (!user) {
-        return res.status(400).json({msg:"invalid userName"});
+        return res.status(400).json({msg:"invalid email"});
     }
     let isValid=await bcrypt.compare(password, user.password)
     if (!isValid) {
         return res.status(400).json({msg:'Invalid Password'})
     }
      //Create JWT  
-     let token= await  jwt.sign({data:{userName:user.userName,id:user._id}},process.env.SECRET_KEY)
+     let token= await  jwt.sign({data:{email:user.email,id:user._id}},process.env.SECRET_KEY)
      res.json({message:'success',token:token});
 }
 const getSingleUser= async (req,res)=>{
@@ -50,8 +50,8 @@ const getSingleUser= async (req,res)=>{
  }
  const updateUser=async (req,res)=>{
      const {id}=req.params;
-     const {userName,password,orders}=req.body;
-     const updateUser=await userModel.findByIdAndUpdate(id,{userName,password,orders},{new:true})
+     const {userName,email,password,orders}=req.body;
+     const updateUser=await userModel.findByIdAndUpdate(id,{userName,email,password,orders},{new:true})
      if (!updateUser) {
         return res.status(404).json("No user with this Id found.");
       }
