@@ -36,6 +36,7 @@ const getAllOrders=async(req,res)=>{
               return res.status(400).send(`Error ${err}`);
              }    
 }
+/*
 const editOrder=async(req,res)=>{
     const id = req.params.id;
     const updateOder =await orderModel.findByIdAndUpdate(id,req.body,{new: true}) ;
@@ -44,6 +45,7 @@ const editOrder=async(req,res)=>{
       }
     res.status(200).json(updateOder);
 }
+*/
 const removeOrder=async(req,res)=>{
     const id = req.params.id;
     if(!id){
@@ -57,6 +59,5 @@ const removeOrder=async(req,res)=>{
 }
 module.exports = { createOrder,
     getAllOrders,
-    editOrder,
     removeOrder 
 };

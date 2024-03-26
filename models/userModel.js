@@ -6,6 +6,16 @@ const userSchema = new mongoose.Schema({
   validate:[validator.isEmail,'Invalid Email'],lowercase:true
 },
   password: { type: String, required: true},
+  confirmPassword:{
+    type:String,
+    required:[true,"Confirm Password is Required!"],
+  },
+  role: {
+    type: String,
+    default:"Buyer",
+     enum: ['Seller', 'Buyer']
+    }
+
  // orders: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'Product' }],
 });
 const userModel= mongoose.model('User',userSchema);

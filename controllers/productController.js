@@ -1,15 +1,31 @@
 const productModel=require("../models/productModel")
+
 const getAllProducts=async(req,res)=>{
     try{
       const query=req.query;
       const limit=parseInt(query.limit) || 10;
       const page=parseInt(query.page)  || 1;
       const skip= (page - 1)* limit;
-        let data = await productModel.find().populate('sellerId').limit(limit).skip(skip);  
+        let data = await productModel.find({}).populate('sellerId').limit(limit).skip(skip);  
          res.status(201).json({success:true ,data : data});  
           }catch (err) { 
             return res.status(400).send(`Error ${err}`);
            }                                        
+}
+
+const getAllProductsBySellerId = async (req, res) => {
+  try {
+      const userId = req.params.sellerId; // تفترض أن يكون هناك معرف مستخدم في طلبك
+      const query = req.query;
+      const limit = parseInt(query.limit) || 10;
+      const page = parseInt(query.page) || 1;
+      const skip = (page - 1) * limit;
+
+      const data = await productModel.find({ sellerId: userId }).limit(limit).skip(skip);
+      res.status(200).json({ success: true, data: data });
+  } catch (err) {
+      return res.status(400).send(`Error ${err}`);
+  }
 }
 const addProduct = async (req, res) => {
   try {
@@ -54,6 +70,7 @@ const deleteProduct=async (req,res)=>{
 }
 module.exports={
     getAllProducts,
+    getAllProductsBySellerId,
     getOneProduct,
     addProduct,
     updateProduct,

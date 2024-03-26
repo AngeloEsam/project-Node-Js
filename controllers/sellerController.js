@@ -1,3 +1,4 @@
+/*
 const sellerModel=require("../models/sellerModel");
 const productModel=require("../models/productModel");
  
@@ -92,3 +93,4 @@ module.exports={
     editProductBySeller,
     deleteProductBySeller
 };
+*/

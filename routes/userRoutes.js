@@ -2,6 +2,8 @@ const express = require('express');
 const {auth}=require('../middlewares/auth')
 const {getAllUsers,registerNewUser,loginUser,getSingleUser,updateUser,deleteUser}=require("../controllers/userController");
 const router = express.Router();
+//delete User
+router.delete('/:id',deleteUser)
 //get All Users
 router.get('/', getAllUsers)
 //register new User
@@ -11,7 +13,6 @@ router.post( '/login', loginUser);
 //get single User
 router.get( "/:id",getSingleUser ) ; 
 //update user
-router.patch( '/:id' , updateUser)
-//delete User
-router.delete('/:id',deleteUser)
+router.patch( '/:id' ,auth, updateUser)
+
 module.exports=router

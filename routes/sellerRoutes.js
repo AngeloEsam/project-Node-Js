@@ -1,3 +1,4 @@
+/*
 const express = require('express');
 const path=require("path");
 const multer = require('multer');
@@ -27,3 +28,4 @@ router.put('/:sellerId/products/:productId',editProductBySeller)
 //delete  product by seller
 router.delete('/:sellerId/products/:productId', deleteProductBySeller)
 module.exports=router;
+*/
